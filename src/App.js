@@ -6,9 +6,9 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          My First Deploy.
-        </p>
+        <h1>
+          Hello kem cho???? Mja ma ne palty...... 
+        </h1>
       </header>
     </div>
   );
