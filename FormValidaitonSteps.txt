@@ -1,0 +1,26 @@
+React Hook Form Validation
+
+Technology
+    We’re gonna use following modules:
+        react 17/16
+        bootstrap 4
+        react-hook-form 7
+        yup
+        @hookform/resolvers 2.4.0
+
+Use Packages
+    react-hook-form
+    @hookform/resolvers
+    yup
+
+Step - 1
+
+    npm install @hookform/resolvers
+    npm install react-hook-form
+    npm install yup
+    npm install bootstrap
+
+Step - 2
+
+    Add Register Form Html
+
