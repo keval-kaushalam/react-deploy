@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { useForm } from 'react-hook-form'
 import { Container, Box, Avatar, Typography, Grid, TextField, FormControlLabel, Checkbox, Button, Link} from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
@@ -6,6 +6,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
+
+import axios from 'axios'
 
 function Copyright(props) {
     return (
@@ -21,12 +23,9 @@ function Copyright(props) {
 }
 
 const theme = createTheme();
-
-
-
-
-
 const SignUp = () => {
+    // axios.defaults.baseURL = "https://www.redefinesolutions.com";
+    axios.defaults.baseURL = "http://10.0.10.53/RedefineSolutions";
 
     const validationSchema = Yup.object().shape({
         firstname : Yup.string()
