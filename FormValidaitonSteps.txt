@@ -13,14 +13,32 @@ Use Packages
     @hookform/resolvers
     yup
 
-Step - 1
-
     npm install @hookform/resolvers
     npm install react-hook-form
     npm install yup
     npm install bootstrap
 
-Step - 2
 
-    Add Register Form Html
+Material UI
+    the world's most popular React UI framework.
+
+    => Install
+        npm install @mui/material @emotion/react @emotion/styled
+    
+    => Roboto Font
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+            />
+    
+    => Font Icons
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+            />
+
+    => SVG Icons
+        npm install @mui/icons-material
+
+
 
