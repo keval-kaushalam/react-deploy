@@ -1,6 +1,6 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { Container, Box, Avatar, Typography, Grid, TextField, FormControlLabel, Checkbox, Button, Link, CssBaseline, Paper} from '@mui/material'
+import { Box, Avatar, Typography, Grid, TextField, FormControlLabel, Checkbox, Button, Link, CssBaseline, Paper} from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -18,7 +18,6 @@ const SignIn = () => {
 
     const {
         register,
-        reset,
         handleSubmit,
         formState: { errors }
     } = useForm({resolver: yupResolver(validationSchema)})
