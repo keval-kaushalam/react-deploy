@@ -12,8 +12,6 @@ import CopyRight from './CopyRight'
 
 const theme = createTheme();
 const SignUp = () => {
-    // axios.defaults.baseURL = "https://www.redefinesolutions.com";
-    axios.defaults.baseURL = "http://10.0.10.53/RedefineSolutions";
 
     const validationSchema = Yup.object().shape({
         firstname : Yup.string()
@@ -60,7 +58,7 @@ const SignUp = () => {
                     <Typography component="h1" variant="h5">
                         Sign Up
                     </Typography>
-                    <Box component='form' onSubmit={handleSubmit(onSubmit)} sx={{ mt:3 }}>
+                    <Box component='form' onSubmit={handleSubmit(onSubmit)} sx={{ mt:3 }} autoComplete="off">
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField 

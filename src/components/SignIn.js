@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 
 import CopyRight from './CopyRight'
+import axios from 'axios'
 
 const theme = createTheme();
 const SignIn = () => {
@@ -23,7 +24,12 @@ const SignIn = () => {
     } = useForm({resolver: yupResolver(validationSchema)})
 
     const onSubmit = (data) => {
-        console.log(data);
+        axios.defaults.withCredentials = true;
+        axios.get(`${process.env.REACT_APP_API_URL}/sanctum/csrf-cookie`).then(response => {
+            axios.post(`${process.env.REACT_APP_API_URL}/login`,data).then(res => {
+                console.log(res)
+            });
+        });
     }
 
     return (
