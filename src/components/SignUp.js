@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Container, Box, Avatar, Typography, Grid, TextField, FormControlLabel, Checkbox, Button, Link} from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
@@ -9,9 +9,18 @@ import * as Yup from 'yup'
 
 import axios from 'axios'
 import CopyRight from './CopyRight'
+import { useHistory } from 'react-router-dom'
+import swal from 'sweetalert'
 
 const theme = createTheme();
 const SignUp = () => {
+    const history = useHistory();
+    const [registerInput, setRegisterInput] = useState({
+        firstname:'',
+        lastname:'',
+        email:"",
+        errors_list: []
+    })
 
     const validationSchema = Yup.object().shape({
         firstname : Yup.string()
@@ -38,7 +47,19 @@ const SignUp = () => {
     } = useForm({resolver: yupResolver(validationSchema)})
 
     const onSubmit = (data) => {
-        console.log(data)
+        axios.get(`${process.env.REACT_APP_API_URL}/sanctum/csrf-cookie`).then(response => {
+            axios.post(`${process.env.REACT_APP_API_URL}/api/register`,data).then(res => {
+                if(res.data.status === 200){
+
+                    localStorage.setItem('auth_token',res.data.token)
+                    localStorage.setItem('auth_user',JSON.stringify(res.data))
+                    // swal("success",res.data.success,"Success")
+                    history.push('/')
+                }else{
+                    setRegisterInput({...registerInput, errors_list: res.data.validation_error})
+                }
+            });
+        });
     }
 
     return(
@@ -63,8 +84,8 @@ const SignUp = () => {
                             <Grid item xs={12} sm={6}>
                                 <TextField 
                                     {...register('firstname')}
-                                    error={errors.firstname}
-                                    helperText={errors.firstname?.message}
+                                    error={errors.firstname ? errors.firstname: registerInput.errors_list.firstname}
+                                    helperText={errors.firstname ? errors.firstname?.message : registerInput.errors_list.firstname ? registerInput.errors_list.firstname[0]: '' }
                                     autoComplete="fname"
                                     name="firstname"
                                     fullWidth
@@ -76,8 +97,8 @@ const SignUp = () => {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     {...register('lastname')}
-                                    error={errors.lastname}
-                                    helperText={errors.lastname?.message}
+                                    error={errors.lastname ? errors.lastname: registerInput.errors_list.lastname}
+                                    helperText={errors.lastname ? errors.lastname?.message : registerInput.errors_list.lastname ? registerInput.errors_list.lastname[0]: '' }
                                     fullWidth
                                     id="lastname"
                                     label="Last Name"
@@ -88,8 +109,8 @@ const SignUp = () => {
                             <Grid item xs={12}>
                                 <TextField
                                     {...register('email')}
-                                    error={errors.email}
-                                    helperText={errors.email?.message}
+                                    error={errors.email ? errors.email: registerInput.errors_list.email}
+                                    helperText={errors.email ? errors.email?.message : registerInput.errors_list.email ? registerInput.errors_list.email[0]: '' }
                                     fullWidth
                                     id="email"
                                     label="Email Address"
@@ -100,8 +121,8 @@ const SignUp = () => {
                             <Grid item xs={12}>
                                 <TextField
                                     {...register('password')}
-                                    error={errors.password}
-                                    helperText={errors.password?.message}
+                                    error={errors.password ? errors.password: registerInput.errors_list.password}
+                                    helperText={errors.password ? errors.password?.message : registerInput.errors_list.password ? registerInput.errors_list.password[0]: '' }
                                     fullWidth
                                     name="password"
                                     label="Password"

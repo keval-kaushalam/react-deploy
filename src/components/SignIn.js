@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Box, Avatar, Typography, Grid, TextField, FormControlLabel, Checkbox, Button, Link, CssBaseline, Paper} from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
@@ -8,9 +8,18 @@ import * as Yup from 'yup'
 
 import CopyRight from './CopyRight'
 import axios from 'axios'
+import { useHistory } from 'react-router-dom'
+import swal from 'sweetalert'
 
 const theme = createTheme();
 const SignIn = () => {
+
+    const history = useHistory();
+    const [loginInput, setLogin] = useState({
+        email:"",
+        password:"",
+        errors_list: []
+    })
 
     const validationSchema = Yup.object().shape({
         email : Yup.string().required('Please Enter Email Address.').email('Please Enter Valid Email Address.'),
@@ -24,10 +33,19 @@ const SignIn = () => {
     } = useForm({resolver: yupResolver(validationSchema)})
 
     const onSubmit = (data) => {
-        axios.defaults.withCredentials = true;
+        
         axios.get(`${process.env.REACT_APP_API_URL}/sanctum/csrf-cookie`).then(response => {
-            axios.post(`${process.env.REACT_APP_API_URL}/login`,data).then(res => {
-                console.log(res)
+            axios.post(`${process.env.REACT_APP_API_URL}/api/login`,data).then(res => {
+                if(res.data.status === 200){
+                    localStorage.setItem('auth_token',res.data.token)
+                    localStorage.setItem('auth_user',JSON.stringify(res.data))
+                    // swal("Success",res.data.success,"success")
+                    history.push('/')
+                }else if(res.data.status === 401){
+                    swal("Warning",res.data.message,"warning")
+                }else{
+                    setLogin({...loginInput, errors_list: res.data.validation_error})
+                }
             });
         });
     }
@@ -67,11 +85,11 @@ const SignIn = () => {
                             <Typography component="h1" variant="h5">
                                 Sign in
                             </Typography>
-                            <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
+                            <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }} autoComplete="off">
                                 <TextField
                                     {...register('email')}
-                                    error={errors.email?.message}
-                                    helperText={errors.email?.message}
+                                    error={errors.email ? errors.email: loginInput.errors_list.email}
+                                    helperText={errors.email ? errors.email?.message : loginInput.errors_list.email ? loginInput.errors_list.email[0]: '' }
                                     margin="normal"
                                     required
                                     fullWidth
@@ -83,8 +101,8 @@ const SignIn = () => {
                                 />
                                 <TextField
                                     {...register('password')}
-                                    error={errors.password}
-                                    helperText={errors.password?.message}
+                                    error={errors.password ? errors.password: loginInput.errors_list.password}
+                                    helperText={errors.password ? errors.password?.message : loginInput.errors_list.password ? loginInput.errors_list.password[0]: '' }
                                     margin="normal"
                                     required
                                     fullWidth
